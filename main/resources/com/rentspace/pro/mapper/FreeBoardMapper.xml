@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rentspace.pro.mapper.FreeBoardMapper">
+	<!-- 각 태그의 id에 설정하는 값은, 이 SQL문을 사용하는 메퍼-인터페이스의 해당 메소드 이름과 동일해야 함 -->
+	<!-- 게시물 조회 - 목록 -->
+	<select id="selectFreeBoardList"
+		resultType="com.rentspace.pro.domain.FreeBoardVO">
+		
+<![CDATA[
+SELECT * FROM space.tbl_freeboard
+WHERE freeboard_no > 0
+AND freeboard_del_flag = 0
+ORDER BY freeboard_no DESC
+]]>
+	</select> 
+	
+	
+	<!-- 게시물 등록1 - selectKey 이용않함 -->
+ 	<insert id="insertFreeBoard">
+		INSERT INTO space.tbl_freeboard
+		VALUES (seq_freeboard.nextval, #{freeboard_title}, #{freeboard_content}, #{freeboard_member_id},
+		DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+	</insert> 
+	
+	<!-- 게시물 등록2 - selectKey 이용 -->
+ 	<insert id="insertFreeBoardSelectKey">
+		<selectKey keyProperty="freeboard_no" order="BEFORE"
+			resultType="long">
+			SELECT space.seq_freeboard.nextval FROM dual
+		</selectKey>
+		INSERT INTO space.tbl_freeboard
+		VALUES (#{freeboard_no}, #{freeboard_title}, #{freeboard_content}, #{freeboard_member_id},
+		DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+	</insert> 
+	
+	<!-- 게시물 조회 -->
+	<select id="selectFreeBoard"
+		resultType="com.rentspace.pro.domain.FreeBoardVO">
+		SELECT * FROM space.tbl_freeboard
+		WHERE freeboard_no = #{freeboard_no} AND freeboard_del_flag = 0
+	</select> 
+	
+	<!-- 게시물 삭제 - 사용자 요청 1: 삭제요청, 0: 유지 -->
+	<update id="updateBdelFlag">
+		UPDATE space.tbl_freeboard
+		SET freeboard_del_flag = 1
+		where freeboard_no = #{freeboard_no}
+	</update> 
+	
+	<!-- 게시물 삭제 - 관리자 요청 -->
+	<delete id="deleteFreeBoard">
+		DELETE space.tbl_freeboard WHERE freeboard_no = #{freeboard_no} AND freeboard_del_flag = 1
+	</delete> 
+	
+	<!-- 게시물 삭제 – 삭제 요청된 게시물들 전체 삭제 (관리자) -->
+ 	<delete id="deleteAllBoardSetDeleted">
+		DELETE space.tbl_freeboard WHERE freeboard_del_flag = 1
+	</delete> 
+	
+	<!-- 게시물 수정 -->
+ 	<update id="updateFreeBoard">
+		UPDATE space.tbl_freeboard
+		SET freeboard_title = #{freeboard_title},
+		freeboard_content = #{freeboard_content},
+		freeboard_register_date = DEFAULT
+		WHERE freeboard_no = #{freeboard_no} AND freeboard_del_flag = 0
+	</update> 
+	
+	<!-- 게시물 조회수 증가 : 게시물 조회 시 + 1 --> <!-- AND bdelFlag = 0 -->
+ 	<update id="updateBviewsCnt">
+		UPDATE space.tbl_freeboard
+		SET freeboard_views_count = freeboard_views_count + 1
+		WHERE freeboard_no = #{freeboard_no}
+	</update> 
+	
+	<!-- 게시물의 댓글 개수 수정: 댓글추가 시 +1, 댓글삭제 시 -1 --> <!-- AND bdelFlag = 0 -->
+ 	<update id="updateBReplyCnt">
+		UPDATE space.tbl_freeboard
+		SET freeboard_reply_count = freeboard_reply_count + #{amount}
+		WHERE freeboard_no = #{freeboard_no}
+	</update> 
+	
+</mapper>

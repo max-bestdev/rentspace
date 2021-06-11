@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace = "com.rentspace.pro.mapper.NoticeMapper">
+ <!-- 각 태그의 di에 설정하는 값은, 이 SQL문을 사용하는 메퍼-인터페이스의 해당 메소드 이름과 동일해야 함  -->
+ 
+ 
+ <!--게시물 조회 - 목록  -->
+ <select id = "selectNoticeList" resultType="com.rentspace.pro.domain.NoticeVO">
+ <![CDATA[ 
+ SELECT * FROM space.tbl_notice
+ WHERE notice_no > 0
+ AND notice_del_flag = 0
+ ORDER BY notice_no DESC 
+ ]]>
+ </select>
+ 
+ <!--게시물 등록1 - selectKey 이용않함  -->
+ <insert id ="insertNotice">
+ INSERT INTO space.tbl_notice
+ VALUES (seq_notice.nextval, #{notice_title}, #{notice_content}, #{notice_member_id},
+ DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+ </insert>
+ 
+ <!--게시물 등록2 - selectKey 이용  -->
+ <insert id ="insertNoticeSelectKey">
+ <selectKey keyProperty="notice_no" order="BEFORE" resultType="long">
+ SELECT space.seq_notice.nextval FROM dual
+ </selectKey>
+ 
+ INSERT INTO space.tbl_notice
+ VALUES (#{notice_no}, #{notice_title}, #{notice_content}, #{notice_member_id}, 
+ DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+ </insert>
+ 
+<!--게시물 조회  -->
+<select id = "selectNotice" resultType="com.rentspace.pro.domain.NoticeVO">
+SELECT * FROM space.tbl_notice WHERE notice_no = #{notice_no}
+</select>
+
+<!--게시물 삭제 - 사용자 요청 1: 삭제요청, 0: 유지  -->
+<update id = "updatedel_flag">
+UPDATE space.tbl_notice SET notice_del_flag = 1 
+WHERE notice_no = #{notice_no}
+</update>
+
+<!--게시물 삭제 - 관리자 요청  -->
+<delete id = "deleteNotice">
+DELETE space.tbl_notice WHERE notice_no = #{notice}
+</delete>
+
+<!-- 게시물 삭제 – 삭제 요청된 게시물들 전체 삭제 (관리자) -->
+<delete id="deleteAllNoticeSetDeleted">
+ DELETE space.tbl_notice WHERE notice_del_flag = 1 
+</delete>
+
+<!--게시물 수정  -->
+<update id = "updateNotice">
+UPDATE space.tbl_notice 
+SET notice_title = #{notice_title},
+notice_content = #{notice_content},
+notice_register_date = DEFAULT
+WHERE notice_no = #{notice_no}
+</update>
+
+<!--게시물 조회수 증가 : 게시물 조회 시 +1  -->
+<update id = "updateNotice_Views_Count">
+UPDATE space.tbl_notice 
+SET notice_views_count = notice_views_count + 1 
+WHERE notice_no = #{notice_no}
+</update>
+
+<update id = "updatereply_count">
+UPDATE space.tbl_notice
+SET reply_count = reply_count + #{amount}
+WHERE notice_no = #{notice_no}
+</update>
+
+ 
+ </mapper>
