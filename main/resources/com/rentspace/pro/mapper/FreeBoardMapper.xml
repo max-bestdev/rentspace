@@ -4,7 +4,7 @@
 <mapper namespace="com.rentspace.pro.mapper.FreeBoardMapper">
 	<!-- 각 태그의 id에 설정하는 값은, 이 SQL문을 사용하는 메퍼-인터페이스의 해당 메소드 이름과 동일해야 함 -->
 	<!-- 게시물 조회 - 목록 -->
-	<select id="selectFreeBoardList"
+<!-- 	<select id="selectFreeBoardList"
 		resultType="com.rentspace.pro.domain.FreeBoardVO">
 		
 <![CDATA[
@@ -13,7 +13,7 @@ WHERE freeboard_no > 0
 AND freeboard_del_flag = 0
 ORDER BY freeboard_no DESC
 ]]>
-	</select> 
+	</select>  -->
 	
 	
 	<!-- 게시물 등록1 - selectKey 이용않함 -->
@@ -41,7 +41,7 @@ ORDER BY freeboard_no DESC
 		WHERE freeboard_no = #{freeboard_no} AND freeboard_del_flag = 0
 	</select> 
 	
-<!-- 	<!-- 게시물 조회 - 목록2: 페이징 고려: 삭제 요청된 행 포함 -->
+	<!-- 게시물 조회 - 목록2: 페이징 고려: 삭제 요청된 행 포함 -->
 	<select id="selectFreeBoardList" resultType="com.rentspace.pro.domain.FreeBoardVO">
 	<![CDATA[
 	SELECT freeboard_no, freeboard_title, freeboard_content, freeboard_member_id, freeboard_register_date, freeboard_views_count, freeboard_reply_count, freeboard_del_flag
@@ -51,7 +51,7 @@ ORDER BY freeboard_no DESC
 	)
 	WHERE rn >= ( ( #{pageNum} * #{rowAmountPerPage} ) - ( #{rowAmountPerPage} - 1 ) )
 	]]>
-	</select> -->	
+	</select>	
 	
 	<!-- 게시물 삭제 - 사용자 요청 1: 삭제요청, 0: 유지 -->
 	<update id="updateBdelFlag">
