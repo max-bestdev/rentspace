@@ -11,7 +11,7 @@
 <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                	<h3 class="page-header">User Board - Modify</h3>
+                	<h3 class="page-header">게시글 수정</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -28,33 +28,33 @@
                         	
 		                        	<div class="form-group">
 		                        		<label>글번호</label> 
-		                        		<input class="form-control" value="${board.bno}" name="bno" readonly="readonly" />
+		                        		<input class="form-control" value="${board.freeboard_no}" name="freeboard_no" readonly="readonly" />
 		                        	</div>
 		                         		
 		                        	<div class="form-group">
 		                        		<label>글제목</label> 
-		                        		<input class="form-control" value='<c:out value="${board.btitle}" />'
-		                        				name="btitle" />
+		                        		<input class="form-control" value='<c:out value="${board.freeboard_title}" />'
+		                        				name="freeboard_title" />
 		                            </div>
 		                        		
 		                       		<div class="form-group">
 		                       			<label>글내용</label> 
 		                       			<textarea class="form-control" rows="3" 
-		                       			    name="bcontent"><c:out value="${board.bcontent}" /></textarea>
+		                       			    name="freeboard_content"><c:out value="${board.freeboard_content}" /></textarea>
 		                       		</div>
 		                        		
 		                       		<div class="form-group">
 		                       			<label>작성자</label> 
-		                       			<input class="form-control" value='<c:out value="${board.bwriter}" />'
-		                       				name="bwriter" readonly="readonly" />
+		                       			<input class="form-control" value='<c:out value="${board.freeboard_member_id}" />'
+		                       				name="freeboard_member_id" readonly="readonly" />
 		                       		</div>
 		                       		
 		                       		<div class="form-group">
 		                       			<label>최종수정일</label> [등록일시: <fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss"
-		                       					value="${board.bregDate}"/>]
-		                       			<input class="form-control" name="bmodDate" 
+		                       					value="${board.freeboard_register_date}"/>]
+		                       			<input class="form-control" name="freeboard_register_date" 
 		                       				value='<fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss"
-		                       					value="${board.bmodDate}"/>' 
+		                       					value="${board.freeboard_register_date}"/>' 
 		                       				disabled="disabled" />
 		                       		</div>
 		                        		
@@ -65,10 +65,10 @@
 		                       		<button type="button" id="BtnMoveList" data-oper="list" 
 		                       		class="btn btn-info">취소</button> 
 		                       		
-		                       		<input type='hidden' name='pageNum' value='${myBoardPagingDTO.pageNum}'>
-		 							<input type='hidden' name='rowAmountPerPage' value='${myBoardPagingDTO.rowAmountPerPage}'>
-                        			<input type='hidden' name='scope' value='${myBoardPagindDTO.scope}'>
-                        			<input type='hidden' name='keyword' value='${myBoardPagingDTO.keyword}'>
+		                       		<input type='hidden' name='pageNum' value='${boardPagingDTO.pageNum}'>
+		 							<input type='hidden' name='rowAmountPerPage' value='${boardPagingDTO.rowAmountPerPage}'>
+                        			<input type='hidden' name='scope' value='${boardPagindDTO.scope}'>
+                        			<input type='hidden' name='keyword' value='${boardPagingDTO.keyword}'>
                         	</form>
                         		
                         </div><!-- /.panel-body -->
@@ -92,6 +92,8 @@ $('button').on("click", function(e){
 	alert("operation: " + operation);
 	
 	if(operation == "modify"){
+		
+
 		frmModify.attr("action", "${contextPath}/freeboard/modify");
 	} else if(operation == "remove"){
 		frmModify.attr("action", "${contextPath}/freeboard/delete");
@@ -99,8 +101,8 @@ $('button').on("click", function(e){
 		
 		 var pageNumInput = $("input[name='pageNum']").clone();
 		 var rowAmountInput = $("input[name='rowAmountPerPage']").clone();
-		 var scopeInt = $("input[name='scope']").clone();
-		 var keywordInt = $("input[name='keyword']").clone();
+		 var scopeInput = $("input[name='scope']").clone();
+		 var keywordInput = $("input[name='keyword']").clone();
 		 
 		 frmModify.empty(); //form의 모든 input을 삭제
 		 
@@ -110,11 +112,11 @@ $('button').on("click", function(e){
 		 frmModify.append(scopeInput);
 		 frmModify.append(keywordInput);
 	}
-} 
+ 
 	
 	frmModify.submit();
 	
-	});
+});
 
 
  </script>       

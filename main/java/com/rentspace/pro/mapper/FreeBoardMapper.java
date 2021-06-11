@@ -2,6 +2,7 @@ package com.rentspace.pro.mapper;
 
 import java.util.List;
 
+import com.rentspace.pro.common.paging.FreeBoardPagingDTO;
 import com.rentspace.pro.domain.FreeBoardVO;
 
 
@@ -9,6 +10,9 @@ public interface FreeBoardMapper {
 //게시물 조회 - 목록
 	public List<FreeBoardVO> selectFreeBoardList();
 
+//게시물 조회 - 목록 2: 페이징 고려
+	public List<FreeBoardVO> selectFreeBoardList(FreeBoardPagingDTO freeBoardPagingDTO);	
+	
 //게시물 등록1 - selectKey 이용않함
 	public Integer insertFreeBoard(FreeBoardVO freeBoard);
 

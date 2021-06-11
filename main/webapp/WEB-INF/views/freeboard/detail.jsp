@@ -27,16 +27,16 @@
                 <div class="panel-heading"> 
                     <div class="row">
                         <div class="col-md-3" style="white-space: nowrap; height: 45px; padding-top:11px;">
-                            <strong style="font-size:18px;">${board.bwriter}님 작성</strong>
+                            <strong style="font-size:18px;">${board.freeboard_member_id}님 작성</strong>
                         </div>
                         <div class="col-md-3" style="white-space: nowrap; height: 45px; padding-top:16px;">
                             <span class="text-primary" style="font-size: smaller; height: 45px; padding-top: 19px;">
                                 <span>
                                     <span>등록일:&nbsp;</span>
-                                    <strong><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.bregDate}"/></strong>
+                                    <strong><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.freeboard_register_date}"/></strong>
                                     <span>&nbsp;&nbsp;</span>                                   
                                 </span>
-                                <span>조회수:&nbsp;<strong><c:out value="${board.bviewsCnt}"/></strong></span>
+                                <span>조회수:&nbsp;<strong><c:out value="${board.freeboard_views_count}"/></strong></span>
                             </span>
                         </div>
                         <div class="col-md-6" style="height: 45px; padding-top:6px;"><!-- vertical-align: middle; -->
@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label" style="white-space: nowrap;">글제목</label>
                         <div class="col-sm-11">
-                            <input class="form-control" value='<c:out value="${board.btitle}"/>' name="btitle" readonly="readonly"/>
+                            <input class="form-control" value='<c:out value="${board.freeboard_title}"/>' name="freeboard_title" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -60,7 +60,7 @@
                         <%-- <textarea>와 </textarea>는 한 줄에 작성되어야 필요없는 공백이 포함되지 않음 --%>
                         <div class="col-sm-11">
                             <textarea class="form-control" rows="3" name="bcontent" style="resize: none;" 
-                                      readonly="readonly"><c:out value="${board.bcontent}"/></textarea>
+                                      readonly="readonly"><c:out value="${board.freeboard_content}"/></textarea>
                         </div>
                     </div>
                 </div><!-- /.panel-body -->
@@ -84,7 +84,7 @@
             <div class="panel-heading">
                 <p style="margin-bottom: 0px; font-size: 16px;">
                     <strong style="padding-top: 2px;">
-                        <span>댓글&nbsp;<c:out value="${board.breplyCnt}"/>개</span> 
+                        <span>댓글&nbsp;<c:out value="${board.freeboard_reply_count}"/>개</span> 
                         <span>&nbsp;</span>
                         <button type="button" id="btnChgCmtReg" class="btn btn-info btn-sm">댓글 작성</button>
                         <button type="button" id="btnRegCmt" class="btn btn-warning btn-sm" style="display:none">댓글 등록</button>
@@ -169,7 +169,7 @@ $("#btnToList").on("click", function(){
 	frmSendValue.submit();
 })
 </script>
-<script type="text/javascript" src="${contextPath}/resources/js/mycomment.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/boardcomment.js"></script>
 <script>
 
 //게시물 번호 저장
@@ -183,11 +183,11 @@ function showCmtList(page){
     myCommentClsr.getCmtList(
         {freeboard_no: freeboard_noValue, page: page || 1 },
         function(replyPagingCreator) { //ajax에서 실행할 callback 함수
-            console.log("서버로부터 전달된 pageNum(replyPagingCreator.myRelyPaging.pageNum): "
-                        + replyPagingCreator.myReplyPaging.pageNum);
+            console.log("서버로부터 전달된 pageNum(replyPagingCreator.freeboardRelyPaging.pageNum): "
+                        + replyPagingCreator.freeboardReplyPaging.pageNum);
 
             frmCmtPagingValue.find("input[name='pageNum']")
-                             .val(replyPagingCreator.myReplyPaging.pageNum);
+                             .val(replyPagingCreator.freeboardReplyPaging.pageNum);
             
             console.log("폼에 저장된 페이징번호 pageNum(): "
                         + frmCmtPagingValue.find("input[name='pageNum']").val());
@@ -255,7 +255,7 @@ function showCmtList(page){
             //commentUL.append(str); //append 사용 시, 기존 내용 밑에 새로운 내용 추가 (페이징 대신 사용).
 
             //페이징번호 표시 함수 호출
-            showCmtPagingNums(replyPagingCreator.myReplyPaging.pageNum,
+            showCmtPagingNums(replyPagingCreator.boardReplyPaging.pageNum,
            	                  replyPagingCreator.startPagingNum,
            	                  replyPagingCreator.endPagingNum,
            	                  replyPagingCreator.prev,
@@ -590,7 +590,7 @@ $(document).ready(function(){//페이지 로딩 시 함수 실행  전체 Jav
 
 /*   
 //댓글 목록표시 테스트	
-myCommentClsr.getCmtList(
+boardCommentClsr.getCmtList(
   {freeboard_no:freeboard_noValue, page:1},   //1번째 freeboard_noAndPage의 인자값(JS객체)
   function(replyPagingCreator){  //2번째 callback 인자값: 성공 시 실행되는 함수(익명블록)
       for (var i = 0, len = replyPagingCreator.replyList.length || 0 ; i < len; i++){
@@ -601,18 +601,18 @@ myCommentClsr.getCmtList(
  */
   
 /* //댓글등록  테스트
-myCommentClsr.registerCmt(
+boardCommentClsr.registerCmt(
   {freeboard_no:freeboard_noValue, rcontent:"JS-클로저-댓글입력테스트입니다.", rwriter: "user7"} , //1-comment인자값 
   function(result){    //2번째 callback 인자값: 성공 시 실행되는 함수
-      alert("myCommentClsr.registerCmt()처리결과 " + result);
+      alert("boardCommentClsr.registerCmt()처리결과 " + result);
   }
 ); 
 
 //답글등록 테스트
-myCommentClsr.registerReply(
+CommentClsr.registerReply(
   {freeboard_no: freeboard_noValue, prno: 1, rcontent: "JS-클로저-댓글의 답글입력테스트입니다.", rwriter: "user10"}, 
   function(result){ //2번째 callback 인자값: 성공시 실행되는 함수
-      alert("myCommentClsr.registerReply()처리결과 " + result); //익명블록 형태의 콜백함수
+      alert("boardCommentClsr.registerReply()처리결과 " + result); //익명블록 형태의 콜백함수
   }
 ); 
  */
@@ -620,7 +620,7 @@ myCommentClsr.registerReply(
 
 /* 
 //댓글-답글 조회 테스트
-myCommentClsr.getCmtReply(
+boardCommentClsr.getCmtReply(
   {freeboard_no: freeboard_noValue, rno: 1 },  
   function(data){
       console.log(data);
@@ -628,7 +628,7 @@ myCommentClsr.getCmtReply(
 );
 
 //댓글-답글 수정 테스트 
-myCommentClsr.modifyCmtReply(
+boardCommentClsr.modifyCmtReply(
   {freeboard_no : freeboard_noValue, rno : 1, rcontent: "JS클로저에 의한 댓글 수정======="}	,
   function(modifyResult) {
       alert(modifyResult + "- ajax 처리 완료");
@@ -637,7 +637,7 @@ myCommentClsr.modifyCmtReply(
  */
 /* 
  //댓글-답글 삭제 테스트(실제 삭제 발생)
- myCommentClsr.removeCmtReply(
+ boardCommentClsr.removeCmtReply(
      {freeboard_no : freeboard_noValue, rno : 27, rwriter: "user10"},
      function(deleteResult) {
          console.log(deleteResult);

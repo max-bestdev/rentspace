@@ -11,7 +11,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                	<h3 class="page-header">Board - Register</h3>
+                	<h3 class="page-header">게시글 등록</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -25,15 +25,15 @@
                         
                         	<form role="form" action="${contextPath}/freeboard/register" method="post">
                         		<div class="form-group">
-                        			<label>제목</label> <input class="form-control" name=btitle>
+                        			<label>제목</label> <input class="form-control" name=freeboard_title>
                         		</div>
                         		
                         		<div class="form-group">
-                        			<label>내용</label> <textarea class="form-control" rows="3" name="bcontent"></textarea>
+                        			<label>내용</label> <textarea class="form-control" rows="3" name="freeboard_content"></textarea>
                         		</div>
                         		
                         		<div class="form-group">
-                        			<label>작성자</label> <textarea class="form-control" name="bwriter"></textarea>
+                        			<label>작성자</label> <textarea class="form-control" name="freeboard_member_id"></textarea>
                         		</div>
                         		<button type="submit" class="btn btn-primary">등록</button>
                         		<button type="button" data-oper="list" class="btn btn-warning"

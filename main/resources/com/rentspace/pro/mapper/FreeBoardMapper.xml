@@ -41,6 +41,18 @@ ORDER BY freeboard_no DESC
 		WHERE freeboard_no = #{freeboard_no} AND freeboard_del_flag = 0
 	</select> 
 	
+<!-- 	<!-- 게시물 조회 - 목록2: 페이징 고려: 삭제 요청된 행 포함 -->
+	<select id="selectFreeBoardList" resultType="com.rentspace.pro.domain.FreeBoardVO">
+	<![CDATA[
+	SELECT freeboard_no, freeboard_title, freeboard_content, freeboard_member_id, freeboard_register_date, freeboard_views_count, freeboard_reply_count, freeboard_del_flag
+	FROM ( SELECT /*+ INDEX_DESC (a pk_freeboard) */ ROWNUM rn, a.*
+	FROM space.tbl_freeboard a
+	WHERE ROWNUM <= ( #{pageNum} * #{rowAmountPerPage} )
+	)
+	WHERE rn >= ( ( #{pageNum} * #{rowAmountPerPage} ) - ( #{rowAmountPerPage} - 1 ) )
+	]]>
+	</select> -->	
+	
 	<!-- 게시물 삭제 - 사용자 요청 1: 삭제요청, 0: 유지 -->
 	<update id="updateBdelFlag">
 		UPDATE space.tbl_freeboard

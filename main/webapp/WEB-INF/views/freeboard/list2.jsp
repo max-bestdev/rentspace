@@ -25,73 +25,6 @@
                 </div><!-- /.panel-heading -->
                 <div class="panel-body">
 
-											<form class="form-inline" id="frmSendValue"
-							action="${contextPath}/freeboard/list" method="get">
-							<div class="form-group">
-								<label class="sr-only">frmSendValues</label> <select
-									class="form-control" id="selectAmount" name="rowAmountPerPage">
-									<option value="10"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.rowAmountPerPage eq '10'
-	                                            ? 'selected' : ''}"/>>10개</option>
-									<option value="20"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.rowAmountPerPage eq '20'
-	                                            ? 'selected' : ''}"/>>20개</option>
-									<option value="50"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.rowAmountPerPage eq '50'
-	                                            ? 'selected' : ''}"/>>50개</option>
-									<option value="100"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.rowAmountPerPage eq '100'
-	                                            ? 'selected' : ''}"/>>100개</option>
-								</select> <select class="form-control" id="selectScope" name="scope">
-									<option value=""
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope == null
-	                                          ? 'selected':''}"/>>검색범위</option>
-									<option value="T"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'T'
-	                                          ? 'selected' : ''}"/>>제목</option>
-									<option value="C"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'C'
-	                                          ? 'selected' : ''}"/>>내용</option>
-									<option value="W"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'W'
-	                                          ? 'selected' : ''}"/>>작성자</option>
-									<option value="TC"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'TC'
-	                                           ? 'selected' : ''}"/>>제목
-										+ 내용</option>
-									<option value="TW"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'TW'
-	                                           ? 'selected' : ''}"/>>제목
-										+ 작성자</option>
-									<option value="TCW"
-										<c:out value="${pagingCreator.freeBoardPagingDTO.scope eq 'TCW'
-	                                             ? 'selected' : ''}"/>>제목
-										+ 내용 + 작성자</option>
-								</select>
-
-								<div class="input-group">
-									<input class="form-control" id="inputKeyword" name="keyword"
-										type="text" placeholder="검색어를 입력하세요"
-										value='<c:out value="${pagingCreator.freeBoardPagingDTO.keyword}"/>' />
-									<span class="input-group-btn">
-										<button class="btn btn-info" type="button" id="btnSearchGo">
-											검색 &nbsp;<i class="fa fa-search"></i>
-										</button>
-									</span>
-								</div>
-
-								<div class="input-group">
-									<button id="btnReset" class="btn btn-warning" type="reset">검색초기화</button>
-								</div>
-							</div>
-							<%-- /.form-group --%>
-
-							<input type='hidden' name='pageNum'
-								value='${pagingCreator.freeBoardPagingDTO.pageNum}'> <input
-								type='hidden' name='lastPageNum'
-								value='${pagingCreator.lastPageNum}'>
-						</form>
-
 <table class="table table-striped table-bordered table-hover" 
        style="width:100%;text-align:center;" id="dataTables-example">
     <thead>
@@ -146,7 +79,7 @@
 		<c:forEach var="pageNum" begin="${pagingCreator.startPagingNum}" end="${pagingCreator.endPagingNum}">
   			<!-- 선택된 숫자의 경우, Bootstrap의 active 클래스 이름 추가  -->
   			<!-- <li class="paginate_button"> -->
-  			<li class='paginate_button ${pagingCreator.freeBoardPagingDTO.pageNum == pageNum ? "active":"" }'>
+  			<li class='paginate_button ${pagingCreator.BoardPagingDTO.pageNum == pageNum ? "active":"" }'>
   				<a href="${pageNum}">${pageNum}</a>
   			</li>
 		</c:forEach>
@@ -193,7 +126,7 @@
 </div><!-- /#page-wrapper -->
 
 <form id="frmSendValue">
-    <input type='hidden' name='pageNum' value='${pagingCreator.freeBoardPagingDTO.pageNum}'> 
+    <input type='hidden' name='pageNum' value='${pagingCreator.boardPagingDTO.pageNum}'> 
     <input type='hidden' name='rowAmountPerPage' value='${pagingCreator.boardPagingDTO.rowAmountPerPage}'>
     <input type='hidden' name='lastPageNum' value='${pagingCreator.lastPageNum}'>
 </form>
@@ -203,9 +136,12 @@
 <script>
 
 <%--//새글 등록 버튼 클릭 이벤트 처리: 게시물 등록 화면 이동////////////////////////////////// --%>
+<%-- //11장 등록버튼 클리 시, 새 게시물 등록페이지 호출 --%>
 $("#btnMoveRegister").on("click", function(){
     self.location = "${contextPath}/freeboard/register";
+    //location.href = "${contextPath}/freeboard/register";
 })
+
 
 
 <%--//게시물 행이나 제목 클릭 이벤트 처리: 게시물 상세 화면 이동//////////////////////////////// --%>
@@ -258,62 +194,20 @@ function checkModal(result) {
 	myMsg='';
 }
 
-	<%--//페이징 버튼 클릭 이벤트 처리: 폼에 저장된 페이지번호를 클릭한 페이지번호로 변경한 후, 전송////--%>
-		//페이징 화면이동 
-		$(".paginate_button a").on(
-				"click",
-				function(e) {
+<%--//페이징 버튼 클릭 이벤트 처리: 폼에 저장된 페이지번호를 클릭한 페이지번호로 변경한 후, 전송////--%>
+//페이징 화면이동
+$(".paginate_button a").on( "click", function(e) {
 
-					e.preventDefault(); //a 태그의 동작 막음
-					//alert("페이징번호 클릭함"); 
+	e.preventDefault();   //a 태그의 동작 막음
+	//alert("페이징번호 클릭함");
 
-					//폼에 저장된 현재 화면의 페이지번호를 클릭한 페이징 버튼의 페이지번호로 변경
-					frmSendValue.find("input[name='pageNum']").val(
-							$(this).attr("href"));
-					frmSendValue
-							.attr("action", "${contextPath}/freeboard/list");
-					frmSendValue.attr("method", "get");
-
-					frmSendValue.submit();
-				});
-
-		//표시행수 변경 이벤트 처리
-		$("#selectAmount").on("change", function() {
-			frmSendValue.find("input[name='pageNum']").val(1);
-			frmSendValue.attr("action", "${contextPath}/freeboard/list");
-			frmSendValue.attr("method", "get");
-			frmSendValue.submit();
-		});
-
-//검색버튼 클릭 이벤트 처리
-$("#btnSearchGo").on("click", function(e) {
-
-	if (!$("#selectScope").find("option:selected").val()) {
-		alert("검색범위를 선택하세요");
-		return false;
-	}
-
-	if (!frmSendValue.find("input[name='keyword']").val()) {
-		alert("검색어를 입력하세요");
-		return false;
-	}
-
-	frmSendValue.find("input[name='pageNum']").val("1");
-	//e.preventDefault(); 
-
+	//폼에 저장된 현재 화면의 페이지번호를 클릭한 페이징 버튼의 페이지번호로 변경
+	frmSendValue.find("input[name='pageNum']").val($(this).attr("href"));
+	frmSendValue.attr("action", "${contextPath}/freeboard/list");
+	frmSendValue.attr("method", "get");
 	frmSendValue.submit();
 });
 
-//검색초기화 버튼 이벤트처리
-$("#btnReset").on("click", function() {
-	$("#selectAmount").val(10);
-	$("#selectScope").val("");
-	$("#inputKeyword").val("");
-	$("#hiddenPageNum").val(1);
-	$("#hiddenLastPageNum").val("");
-
-	frmSendValue.submit();
-});
 
 
 //모달 표시 유무 결정/모달에 표시할 내용 수정/모달 표시 실행
@@ -327,6 +221,11 @@ $(document).ready(function() {
 });
 
 </script>
+
+
+
+
+
 
 
 <%@ include file="../freeboardinclude/boardfooter.jsp" %> 

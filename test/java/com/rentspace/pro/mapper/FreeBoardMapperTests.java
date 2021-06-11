@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.rentspace.pro.domain.FreeBoardVO;
+import com.rentspace.pro.common.paging.FreeBoardPagingDTO;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -54,6 +54,16 @@ freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> System.out.println(fr
 ////존재하는 게시물 번호로 테스트
 //log.info(freeBoardMapper.selectFreeBoard(1L));
 //}
+
+//게시물 목록 조회 테스트2 - 페이징 고려
+@Test
+public void testSelectBoardListWithPaging() {
+FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO();//기본 생성자 이용(1, 10)
+freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeBoard -> System.out.println(freeBoard));
+
+freeBoardPagingDTO = new FreeBoardPagingDTO(2, 10);
+freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeBoard -> System.out.println(freeBoard));
+}
 
 ////게시물 삭제 테스트 - 삭제 요청된 게시물들 전체 삭제 (관리자)
 //@Test
