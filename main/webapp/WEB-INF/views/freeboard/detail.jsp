@@ -73,8 +73,8 @@
         <input type='hidden' name='pageNum' value='${freeBoardPagingDTO.pageNum}'>
         <input type='hidden' name='rowAmountPerPage' value='${freeBoardPagingDTO.rowAmountPerPage}'>
         <input type='hidden' name='scope' value='${freeBoardPagingDTO.scope}'>
-        <input type='hidden' name='keyword' value='${freeBoardPagingDTO.keyword}'>
-    </form>
+        <input type='hidden' name='keyword' value='${freeBoardPagingDTO.keyword}'> 
+    </form> 
     
 
 
@@ -92,9 +92,9 @@
                     </strong>
                 </p>
             </div> <!-- /.panel-heading -->
-
+<!-- 
             <div class="panel-body">
-<!-- 댓글 입력창 시작 -->
+댓글 입력창 시작
                 <div class="form-group" style="margin-bottom: 5px;">
                     <textarea class="form-control txtBoxCmt" name="rcontent"
                                placeholder="댓글 작성 시 상대방에 대한 배려와 책임을 담아 주세요.&#10;댓글작성을 원하시면,댓글 작성 버튼을 클릭해주세요."
@@ -102,9 +102,9 @@
                     ></textarea>
                 </div>
                 <hr style="margin-top: 10px; margin-bottom: 10px;">
-<!-- 댓글 입력창 끝 -->
+댓글 입력창 끝
                 <ul class="chat">
-                <!-- 댓글 목록 표시 영역 -->
+                댓글 목록 표시 영역
 
     <li class="left clearfix commentLi" data-freeboard_no="123456"  data-rno="12">
         <div>
@@ -120,7 +120,7 @@
                 <button type="button" style="display:in-block" class="btn btn-primary btn-xs btnChgReg">답글 작성</button>
                 <button type="button" style="display:none" class="btn btn-warning btn-xs btnRegCmt">답글 등록</button>
                 <hr class="txtBoxCmtHr" style="margin-top:10px; margin-bottom:10px">
-                <textarea class="form-control txtBoxCmtMod" name="rcontent" style="margin-bottom:10px"
+                <textarea class="form-control txtBoxCmtMod" name="reply_content" style="margin-bottom:10px"
                           placeholder="답글 작성 시 상대방에 대한 배려와 책임을 담아 주세요.&#10;답글작성을 원하시면,답글 작성  버튼을 클릭해주세요."
                  ></textarea>
             </div>
@@ -128,7 +128,7 @@
     </li>
 
                 </ul>
-            </div><!-- /.panel-body -->
+            </div>/.panel-body -->
 
             <div class="panel-footer" id="showCmtPagingNums">
                 <%-- 댓글 목록의 페이징 번호 표시 영역 --%>
@@ -180,7 +180,7 @@ var frmCmtPagingValue = $("#frmCmtPagingValue");
 //댓글 목록표시
 function showCmtList(page){
 	
-    myCommentClsr.getCmtList(
+    boardCommentClsr.getCmtList(
         {freeboard_no: freeboard_noValue, page: page || 1 },
         function(replyPagingCreator) { //ajax에서 실행할 callback 함수
             console.log("서버로부터 전달된 pageNum(replyPagingCreator.freeboardRelyPaging.pageNum): "
@@ -226,20 +226,20 @@ function showCmtList(page){
               if(replyPagingCreator.replyList[i].lvl > 1){
                 str	+='                    <i class="fa fa-reply fa-fw"></i>&nbsp;';	
               }
-                str	+=                     replyPagingCreator.replyList[i].rwriter 
+                str	+=                     replyPagingCreator.replyList[i].reply_member_id
                     + '                </strong>'
                     + '                <span>&nbsp;</span>'
                     + '                <small class="text-muted">' 
-//                  +                      replyPagingCreator.replyList[i].rmodDate   //수정날짜가 정수값으로 표시
-                    + '                    수정일: ' + myCommentClsr.showDatetime(replyPagingCreator.replyList[i].rmodDate)
+//                  +                      replyPagingCreator.replyList[i].reply_register_date  //수정날짜가 정수값으로 표시
+                    + '                    수정일: ' + boardCommentClsr.showDatetime(replyPagingCreator.replyList[i].reply_register_date)
                     + '                </small>';
               if(replyPagingCreator.replyList[i].lvl > 1){
                 str	+='                <small>&nbsp; 답글</small>';
               }
                 str	+='            </span>'
                     + '            <p data-freeboard_no=' + replyPagingCreator.replyList[i].freeboard_no
-                    + '               data-rno=' + replyPagingCreator.replyList[i].rno
-                    + '               data-rwriter=' + replyPagingCreator.replyList[i].rwriter
+                    + '               data-rno=' + replyPagingCreator.replyList[i].reply_no
+                    + '               data-rwriter=' + replyPagingCreator.replyList[i].reply_member_id
                     + '             >'
                     +                    replyPagingCreator.replyList[i].rcontent + '</p>'
                     + '        </div>';
@@ -576,10 +576,6 @@ $(".chat").on("click", ".commentLi .btnDelCmt", function(){
 
 
 
-
-
-
-
 $(document).ready(function(){//페이지 로딩 시 함수 실행  전체 JavaScript 내용 중 제일 마지막에 위치해야 함
 
     showCmtList(1);
@@ -657,10 +653,4 @@ boardCommentClsr.modifyCmtReply(
 
 
 <%@ include file="../freeboardinclude/boardfooter.jsp" %>
-
-
-
-
-
-
 

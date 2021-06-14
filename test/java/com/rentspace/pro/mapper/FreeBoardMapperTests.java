@@ -1,5 +1,9 @@
 package com.rentspace.pro.mapper;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.rentspace.pro.common.paging.FreeBoardPagingDTO;
+import com.rentspace.pro.domain.FreeBoardVO;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -19,12 +24,12 @@ public class FreeBoardMapperTests {
 	@Setter(onMethod_ = @Autowired)
 	private FreeBoardMapper freeBoardMapper;
 
-//게시물 목록 조회 테스트 테스트 후 메서드 주석처리
-@Test
-public void testSelectBoardList() {
-//freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> log.info(freeBoard));
-freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> System.out.println(freeBoard));
-}
+////게시물 목록 조회 테스트 테스트 후 메서드 주석처리
+//@Test
+//public void testSelectBoardList() {
+////freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> log.info(freeBoard));
+//freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> System.out.println(freeBoard));
+//}
 
 ////게시물 등록 테스트 - selectKey 사용 안함
 //@Test
@@ -56,14 +61,14 @@ freeBoardMapper.selectFreeBoardList().forEach(freeBoard -> System.out.println(fr
 //}
 
 //게시물 목록 조회 테스트2 - 페이징 고려
-@Test
-public void testSelectBoardListWithPaging() {
-FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO();//기본 생성자 이용(1, 10)
-freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeBoard -> System.out.println(freeBoard));
-
-freeBoardPagingDTO = new FreeBoardPagingDTO(2, 10);
-freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeBoard -> System.out.println(freeBoard));
-}
+//	@Test
+//	public void testSelectBoardListWithPaging() {
+//		FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO();// 기본 생성자 이용(1, 10)
+//		freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeboard -> System.out.println(freeboard));
+//
+//		freeBoardPagingDTO = new FreeBoardPagingDTO(2, 10);
+//		freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeboard -> System.out.println(freeboard));
+//	}
 
 ////게시물 삭제 테스트 - 삭제 요청된 게시물들 전체 삭제 (관리자)
 //@Test
@@ -90,5 +95,22 @@ freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO).forEach(freeBoard -> Sys
 //	freeBoardMapper.updateBviewsCnt(34L);
 //	System.out.println("수정된 행 값: " + freeBoardMapper.selectFreeBoard(34L).toString());
 //	}	
-	
+
+	@Test
+	public void testSearchBoardWithPaging() {
+		FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO(); // 기본 생성자 이용(1, 10)
+//myBoardPagingDTO.setKeyword("5");
+freeBoardPagingDTO.setKeyword("5");
+//myBoardPagingDTO.setKeyword("5");
+freeBoardPagingDTO.setScope("T");
+//myBoardPagingDTO.setScope("C");
+//myBoardPagingDTO.setScope("W");
+//myBoardPagingDTO.setScope("TC");
+//myBoardPagingDTO.setScope("TCW");
+//myBoardPagingDTO.setScope("TW");
+//myBoardPagingDTO.setScope("CW");
+		log.info("행 총 개수: " + freeBoardMapper.selectRowAmountTotal(freeBoardPagingDTO));
+		List<FreeBoardVO> list = freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO);
+		list.forEach(board -> log.info(board));
+	}
 }

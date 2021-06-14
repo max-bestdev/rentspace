@@ -8,7 +8,7 @@ import com.rentspace.pro.domain.FreeBoardVO;
 
 public interface FreeBoardMapper {
 //게시물 조회 - 목록
-	public List<FreeBoardVO> selectFreeBoardList();
+//	public List<FreeBoardVO> selectFreeBoardList();
 
 //게시물 조회 - 목록 2: 페이징 고려
 	public List<FreeBoardVO> selectFreeBoardList(FreeBoardPagingDTO freeBoardPagingDTO);	
@@ -36,6 +36,9 @@ public interface FreeBoardMapper {
 
 //게시물 수정
 	public int updateFreeBoard(FreeBoardVO freeBoard);
+
+//게시물 조회 - 총 게시물 개수(페이징 데이터)
+	public Long selectRowAmountTotal(FreeBoardPagingDTO freeBoardPagingDTO);
 
 
 }

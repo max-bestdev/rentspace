@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rentspace.pro.mapper.BoardReplyMapper">
+
+	<!-- 특정 게시물에 대한 댓글 목록 조회 -->
+	<select id="selectBoardReplyList"
+		resultType="com.rentspace.pro.domain.BoardReplyVO">
+<![CDATA[
+SELECT reply_freeboard_no, reply_no, reply_content, reply_member_id, reply_register_date, LEVEL AS lvl
+FROM ( SELECT /*+ INDEX_ASC (a IDX_REPLY_FNO_RNO) */ *
+FROM space.reply
+WHERE reply_freeboard_no = #{reply_freeboard_no} ) a
+]]>
+	</select>
+	
+	<!-- 특정 게시물에 대한 댓글 등록 -->
+	<insert id="insertBoardReplyForBoard">
+		<selectKey keyProperty="reply_no" order="BEFORE"
+			resultType="long">
+			SELECT space.seq_reply.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO space.reply(reply_freeboard_no, reply_no, reply_content, reply_member_id, reply_register_date)
+		VALUES (#{reply_freeboard_no}, #{reply_no}, #{reply_content}, #{reply_member_id}, DEFAULT)
+	</insert>
+	
+	<!-- 특정 게시물에 대한 댓글의 댓글 등록 -->
+	<insert id="insertBoardReplyForReply">
+		<selectKey keyProperty="reply_no" order="BEFORE"
+			resultType="long">
+			SELECT space.seq_reply.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO space.tbl_reply(reply_freeboard_no, reply_no, reply_content, reply_member_id, reply_register_date)
+		VALUES (#{reply_freeboard_no}, #{reply_no}, #{reply_content}, #{reply_member_id}, DEFAULT)
+	</insert>
+	
+	<!-- 특정 게시물에 대한 특정 댓글 조회 -->
+	<select id="selectBoardReply"
+		resultType="com.rentspace.pro.domain.BoardReplyVO">
+<![CDATA[
+SELECT * FROM space.reply WHERE reply_freeboard_no= #{reply_freeboard_no} AND reply_no = #{reply_no}
+]]>
+	</select>
+	
+	<!-- 특정 게시물에 대한 특정 댓글 수정 -->
+	<update id="updateBoardReply">
+<![CDATA[
+UPDATE space.reply
+SET reply_content = #{reply_content},
+reply_register_date = DEFAULT
+WHERE reply_freeboard_no= #{reply_freeboard_no} AND reply_no = #{reply_no}
+]]>
+	</update>
+	
+	<!-- 특정 게시물에 대한 특정 댓글 삭제 -->
+	<delete id="deleteBoardReply">
+<![CDATA[
+DELETE FROM space.reply WHERE reply_freeboard_no= #{reply_freeboard_no} AND reply_no = #{reply_no}
+]]>
+	</delete>
+	
+</mapper>

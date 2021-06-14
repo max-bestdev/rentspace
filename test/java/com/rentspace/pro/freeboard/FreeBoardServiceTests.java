@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.rentspace.pro.common.paging.FreeBoardPagingDTO;
 import com.rentspace.pro.domain.FreeBoardVO;
 import com.rentspace.pro.service.FreeBoardService;
 
@@ -33,14 +34,24 @@ public class FreeBoardServiceTests {
 		assertNotNull(freeBoardService);
 	}
 //게시물 목록 조회 서비스 테스트
-@Test
-public void testGetBoardList() {
-//페이징 고려 안함
-freeBoardService.getBoardList().forEach(freeBoard -> log.info(freeBoard));
-}
+//@Test
+//public void testGetBoardList() {
+////페이징 고려 안함
+//freeBoardService.getBoardList().forEach(freeBoard -> log.info(freeBoard));
+//}
+
+	
+	//게시물 목록 조회 서비스 테스트
+	@Test
+	public void testGetBoardList() {
+	//페이징 고려 안함
+	//myBoardService.getBoardList().forEach(myBoard -> log.info(myBoard));
+	//페이징 고려
+	freeBoardService.getBoardList(new FreeBoardPagingDTO(2, 10)).forEach(freeBoard -> log.info(freeBoard));
+	}
 
 
-
+	
 //게시물 등록: selectKey 이용 테스트
 @Test
 public void testRegisterBoard() {

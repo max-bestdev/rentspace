@@ -34,14 +34,16 @@ public class FreeBoardControllerTests {
 	}
 //테스트 환경 구성-끝
 
-//게시물 목록 조회 테스트
-@Test
-public void testShowBoardList() throws Exception {
-log.info(mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/list"))
-.andReturn()
-.getModelAndView()
-.getModelMap());
-}
+	//게시물 목록 조회 테스트
+	@Test
+	public void testShowBoardList() throws Exception {
+	log.info(mockMvc.perform(MockMvcRequestBuilders.get("/freeboard/list")
+	.param("pageNum", "2") //페이징 테스트 시 추가
+	.param("rowAmount", "10") //페이징 테스트 시 추가
+	).andReturn()
+	.getModelAndView()
+	.getModelMap() );
+	}
 
 //게시물 등록-페이지 호출 테스트
 @Test
