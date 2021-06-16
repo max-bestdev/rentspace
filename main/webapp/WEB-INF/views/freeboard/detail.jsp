@@ -92,9 +92,8 @@
                     </strong>
                 </p>
             </div> <!-- /.panel-heading -->
-<!-- 
+ 
             <div class="panel-body">
-댓글 입력창 시작
                 <div class="form-group" style="margin-bottom: 5px;">
                     <textarea class="form-control txtBoxCmt" name="rcontent"
                                placeholder="댓글 작성 시 상대방에 대한 배려와 책임을 담아 주세요.&#10;댓글작성을 원하시면,댓글 작성 버튼을 클릭해주세요."
@@ -102,10 +101,7 @@
                     ></textarea>
                 </div>
                 <hr style="margin-top: 10px; margin-bottom: 10px;">
-댓글 입력창 끝
                 <ul class="chat">
-                댓글 목록 표시 영역
-
     <li class="left clearfix commentLi" data-freeboard_no="123456"  data-rno="12">
         <div>
             <div>
@@ -116,19 +112,20 @@
                 </span>
                 <p>앞으로 사용할 댓글 표시 기본 템플릿입니다.</p>
             </div>
-            <div class="btnsComment" style="margin-bottom:10px">
+<!--             <div class="btnsComment" style="margin-bottom:10px">
                 <button type="button" style="display:in-block" class="btn btn-primary btn-xs btnChgReg">답글 작성</button>
                 <button type="button" style="display:none" class="btn btn-warning btn-xs btnRegCmt">답글 등록</button>
                 <hr class="txtBoxCmtHr" style="margin-top:10px; margin-bottom:10px">
                 <textarea class="form-control txtBoxCmtMod" name="reply_content" style="margin-bottom:10px"
                           placeholder="답글 작성 시 상대방에 대한 배려와 책임을 담아 주세요.&#10;답글작성을 원하시면,답글 작성  버튼을 클릭해주세요."
                  ></textarea>
-            </div>
+            </div> -->
         </div>
     </li>
 
                 </ul>
-            </div>/.panel-body -->
+            </div>
+<!--             /.panel-body -->
 
             <div class="panel-footer" id="showCmtPagingNums">
                 <%-- 댓글 목록의 페이징 번호 표시 영역 --%>
@@ -146,6 +143,8 @@
 </div><!-- /#page-wrapper -->
 
 <%-- 게시물 상세 표시 끝 --%>
+
+<script type="text/javascript" src="${contextPath}/resources/js/boardcomment.js"></script>
 
 <script>
 
@@ -169,8 +168,10 @@ $("#btnToList").on("click", function(){
 	frmSendValue.submit();
 })
 </script>
-<script type="text/javascript" src="${contextPath}/resources/js/boardcomment.js"></script>
+
 <script>
+
+
 
 //게시물 번호 저장
 var freeboard_noValue = '<c:out value="${board.freeboard_no}"/>';
@@ -183,11 +184,11 @@ function showCmtList(page){
     boardCommentClsr.getCmtList(
         {freeboard_no: freeboard_noValue, page: page || 1 },
         function(replyPagingCreator) { //ajax에서 실행할 callback 함수
-            console.log("서버로부터 전달된 pageNum(replyPagingCreator.freeboardRelyPaging.pageNum): "
-                        + replyPagingCreator.freeboardReplyPaging.pageNum);
+            console.log("서버로부터 전달된 pageNum(replyPagingCreator.boardRelyPaging.pageNum): "
+                        + replyPagingCreator.boardReplyPaging.pageNum);
 
             frmCmtPagingValue.find("input[name='pageNum']")
-                             .val(replyPagingCreator.freeboardReplyPaging.pageNum);
+                             .val(replyPagingCreator.boardReplyPaging.pageNum);
             
             console.log("폼에 저장된 페이징번호 pageNum(): "
                         + frmCmtPagingValue.find("input[name='pageNum']").val());
@@ -263,7 +264,7 @@ function showCmtList(page){
            	                  replyPagingCreator.lastPageNum);
             
         }//.end 매개변수 익명 함수
-    );//.end myCommentClsr.getCmtList
+    );//.end boardCommentClsr.getCmtList
 }//.end showCmtList
 
 //댓글 목록에 표시할 페이징번호 생성 함수: replyPagingCreator로 부터 받아온 값들을 이용
@@ -377,7 +378,7 @@ $("#btnRegCmt").on("click", function(){
       
     console.log("댓글등록: 서버전송 객체내용: " + comment);
     
-    myCommentClsr.registerCmt(
+    boardCommentClsr.registerCmt(
         comment,
         function(serverResult){  
             $(".txtBoxCmt").val("");
@@ -442,17 +443,17 @@ $(".chat").on("click", ".commentLi .btnRegReply" ,function(){
     var txtBoxReply = $(this).prev().val();
     console.log("txtBoxReply: " + txtBoxReply);
     
-    var prnoVal = $(this).closest("li").data("rno");
-    console.log("prnoVal: " + prnoVal);
+    var prnoVal = $(this).closest("li").data("reply_no");
+    console.log("frnoVal: " + frnoVal);
     
     var reply = { freeboard_no: freeboard_noValue,
-                   rcontent: txtBoxReply,
-                   rwriter: loginUser,
-                   prno: prnoVal };
+                   reply_content: txtBoxReply,
+                   reply_writer: loginUser,
+                   frno: frnoVal };
     
     console.log("답글등록: 서버전송 객체내용: " + reply);
     
-    myCommentClsr.registerReply(
+    boardCommentClsr.registerReply(
         reply, 
         function(serverResult){  
             alert("답글이 등록되었습니다");
@@ -487,7 +488,7 @@ $(".chat").on("click", ".commentLi p", function(){
     console.log("선택된 댓글내용: " + rcontent);
 	
     var strTxtBoxReply =
-          "<textarea class='form-control txtBoxMod' name='rcontent' style='margin-bottom:10px;'"
+          "<textarea class='form-control txtBoxMod' name='reply_content' style='margin-bottom:10px;'"
         + "          placeholder='답글 작성 시 상대방에 대한 배려와 책임을 담아 주세요.&#10;답글작성을 원하시면,답글 작성  버튼을 클릭해주세요.'"
         + "></textarea>"
         + "<button type='button' class='btn btn-warning btn-sm btnModCmt'>수정</button> "
@@ -495,7 +496,7 @@ $(".chat").on("click", ".commentLi p", function(){
         + "<button type='button' class='btn btn-info btn-sm btnCancelCmt' style='margin-left: 4px;'>취소</button>";
     
     $(this).after(strTxtBoxReply);
-    $(".txtBoxMod").val(rcontent);
+    $(".txtBoxMod").val(reply_content);
     $(this).attr("style", "display:none");
 
 });
@@ -513,28 +514,28 @@ $(".chat").on("click", ".commentLi .btnCancelCmt", function(){
 $(".chat").on("click", ".commentLi .btnModCmt", function(){
 
     <%--작성자 변수에 저장--%> 
-    var rwriterVal = $(this).siblings("p").data("rwriter");
+    var reply_writerVal = $(this).siblings("p").data("reply_writer");
     var pageNum = frmCmtPagingValue.find("input[name='pageNum']").val();
     console.log("답글 추가가 발생된 댓글 페이지 번호: "+ pageNum);
     
     var txtBoxComment = $(this).prev().val();
     console.log("txtBoxComment: " + txtBoxComment);
     
-    var rnoVal = $(this).closest("li").data("rno");
-    console.log("rnoVal: " + rnoVal);
+    var reply_noVal = $(this).closest("li").data("reply_no");
+    console.log("reply_noVal: " + reply_noVal);
     
     var comment = { freeboard_no: freeboard_noValue,
-                      rno: rnoVal,
-                      rcontent: txtBoxComment,
-                      rwriter: rwriterVal };
+                      reply_no: reply_noVal,
+                      reply_content: txtBoxComment,
+                      reply_writer: rwriterVal };
     
     console.log("답글등록: 서버전송 객체내용: " + comment);
     
-    myCommentClsr.modifyCmtReply(
+    boardCommentClsr.modifyCmtReply(
             comment,
             function(serverResult){
                 alert("수정되었습니다");
-                
+
                 showCmtList(pageNum); <%-- 답글이 추가된 페이지 표시 --%>
             } 
     );
@@ -544,7 +545,7 @@ $(".chat").on("click", ".commentLi .btnModCmt", function(){
 $(".chat").on("click", ".commentLi .btnDelCmt", function(){
 	
     <%--작성자 변수에 저장--%>
-    var rwriterVal = $(this).siblings("p").data("rwriter");
+    var reply_writerVal = $(this).siblings("p").data("reply_writer");
     var delConfirm = confirm('삭제하시겠습니까?');
 
     if(!delConfirm){
@@ -555,17 +556,17 @@ $(".chat").on("click", ".commentLi .btnDelCmt", function(){
     var pageNum = frmCmtPagingValue.find("input[name='pageNum']").val();
     console.log("답글 삭제가 발생된 댓글 페이지 번호: "+ pageNum);
 
-    var rnoVal = $(this).closest("li").data("rno");
-    console.log("rnoVal: " + rnoVal);
+    var reply_noVal = $(this).closest("li").data("reply_no");
+    console.log("reply_noVal: " + reply_noVal);
 
-    var myComment = { freeboard_no: freeboard_noValue,
-                        rno: rnoVal,
-                        rwriter: rwriterVal };
+    var boardComment = { freeboard_no: freeboard_noValue,
+                        reply_no: reply_noVal,
+                        reply_writer: reply_writerVal };
 
-    console.log("답글삭제: 서버전송 객체내용: " + myComment);
+    console.log("답글삭제: 서버전송 객체내용: " + boardComment);
 
-    myCommentClsr.setCmtReplyDeleted(
-        myComment,
+    boardCommentClsr.setCmtReplyDeleted(
+        boardComment,
         function(serverResult){<%--서버에서 댓글저장 성공 시, 브라우저에서 실행될 콜백함수--%>  
             alert("삭제되었습니다.");
 
@@ -576,7 +577,7 @@ $(".chat").on("click", ".commentLi .btnDelCmt", function(){
 
 
 
-$(document).ready(function(){//페이지 로딩 시 함수 실행  전체 JavaScript 내용 중 제일 마지막에 위치해야 함
+$(document).ready(function(){//페이지 로딩 시 함수 실행 전체 JavaScript 내용 중 제일 마지막에 위치해야 함
 
     showCmtList(1);
 	

@@ -97,8 +97,11 @@
 
 						<input type='hidden' name='pageNum'
 							value='${pagingCreator.freeBoardPagingDTO.pageNum}'> 
-							<input type='hidden' name='lastPageNum' value='${pagingCreator.lastPageNum}'> 
-							<input type='hidden' name='lastPageNum' value='${pagingCreator.lastPageNum}'
+							
+							<input type='hidden' name='pageNum' value='${pagingCreator.freeBoardPagingDTO.pageNum}'>
+					    	<input type='hidden' name='rowAmountPerPage' value='${pagingCreator.freeBoardPagingDTO.rowAmountPerPage}'>
+					 		<input type='hidden' name='lastPageNum' value='${pagingCreator.lastPageNum}'> 
+							
 					</form>
 					
                     <br><br>
@@ -129,7 +132,9 @@
 										data-freeboard_no='<c:out value="${board.freeboard_no}"/>'>
 										<td><c:out value="${board.freeboard_no}" /></td>
 										<td style="text-align: left;"><c:out
-												value="${board.freeboard_title}" /></td>
+												value="${board.freeboard_title}" />
+										<small>[댓글수: <strong><c:out value="${board.freeboard_reply_count}"/></strong>]</small>		
+										</td>
 										<td><c:out value="${board.freeboard_member_id}" /></td>
 										<td><fmt:formatDate pattern="yyyy/MM/dd"
 												value="${board.freeboard_register_date}" /><br> <%-- ${board.bregDate} --%>

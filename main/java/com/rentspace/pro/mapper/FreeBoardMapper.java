@@ -39,6 +39,8 @@ public interface FreeBoardMapper {
 
 //게시물 조회 - 총 게시물 개수(페이징 데이터)
 	public Long selectRowAmountTotal(FreeBoardPagingDTO freeBoardPagingDTO);
+//오류가 나서 일단 삽입
+	public void updateBReplyCnt(long reply_freeboard_no, int i);
 
 
 }

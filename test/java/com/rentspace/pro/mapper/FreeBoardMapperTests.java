@@ -1,17 +1,10 @@
 package com.rentspace.pro.mapper;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.rentspace.pro.common.paging.FreeBoardPagingDTO;
-import com.rentspace.pro.domain.FreeBoardVO;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -96,21 +89,21 @@ public class FreeBoardMapperTests {
 //	System.out.println("수정된 행 값: " + freeBoardMapper.selectFreeBoard(34L).toString());
 //	}	
 
-	@Test
-	public void testSearchBoardWithPaging() {
-		FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO(); // 기본 생성자 이용(1, 10)
-//myBoardPagingDTO.setKeyword("5");
-freeBoardPagingDTO.setKeyword("5");
-//myBoardPagingDTO.setKeyword("5");
-freeBoardPagingDTO.setScope("T");
-//myBoardPagingDTO.setScope("C");
-//myBoardPagingDTO.setScope("W");
-//myBoardPagingDTO.setScope("TC");
-//myBoardPagingDTO.setScope("TCW");
-//myBoardPagingDTO.setScope("TW");
-//myBoardPagingDTO.setScope("CW");
-		log.info("행 총 개수: " + freeBoardMapper.selectRowAmountTotal(freeBoardPagingDTO));
-		List<FreeBoardVO> list = freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO);
-		list.forEach(board -> log.info(board));
-	}
+//	@Test
+//	public void testSearchBoardWithPaging() {
+//		FreeBoardPagingDTO freeBoardPagingDTO = new FreeBoardPagingDTO(); // 기본 생성자 이용(1, 10)
+////freeBoardPagingDTO.setKeyword("5");
+//freeBoardPagingDTO.setKeyword("5");
+////freeBoardPagingDTO.setKeyword("5");
+//freeBoardPagingDTO.setScope("T");
+////freeBoardPagingDTO.setScope("C");
+////freeBoardPagingDTO.setScope("W");
+////freeBoardPagingDTO.setScope("TC");
+////freeBoardPagingDTO.setScope("TCW");
+////freeBoardPagingDTO.setScope("TW");
+////freeBoardPagingDTO.setScope("CW");
+//		log.info("행 총 개수: " + freeBoardMapper.selectRowAmountTotal(freeBoardPagingDTO));
+//		List<FreeBoardVO> list = freeBoardMapper.selectFreeBoardList(freeBoardPagingDTO);
+//		list.forEach(board -> log.info(board));
+//	}
 }
